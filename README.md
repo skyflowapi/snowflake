@@ -88,14 +88,14 @@ Next, you'll create and configure the Lambda function to detokenize values from 
     1.  Click the **Configuration** tab, then click **Environment variables**.
     2.  Create and set the following variables as key-value pairs:
 
-        | Key                                          | Value                                                     |
-                | -------------------------------------------- | --------------------------------------------------------- |
-        | `SECRET_NAME`                                | The name of the secret you created.                       |
-        | `VAULT_ID`                                   | Your Skyflow Vault ID. Found on your Vault Details page.  |
-        | `VAULT_URL`                                  | Your Skyflow Vault URL. Found on your Vault Details page. |
-        | `PARAMETERS_SECRETS_EXTENSION_CACHE_ENABLED` | `true`                                                    |
-        | `PARAMETERS_SECRETS_EXTENSION_LOG_LEVEL`     | `debug`                                                   |
-        | `ENABLE_RESPONSE_TRANSLATOR`                 | `false`. Can be `true` if needed.                         |
+| Key                                          | Value                                                     |
+| -------------------------------------------- | --------------------------------------------------------- |
+| `SECRET_NAME`                                | The name of the secret you created.                       |
+| `VAULT_ID`                                   | Your Skyflow Vault ID. Found on your Vault Details page.  |
+| `VAULT_URL`                                  | Your Skyflow Vault URL. Found on your Vault Details page. |
+| `PARAMETERS_SECRETS_EXTENSION_CACHE_ENABLED` | `true`                                                    |
+| `PARAMETERS_SECRETS_EXTENSION_LOG_LEVEL`     | `debug`                                                   |
+| `ENABLE_RESPONSE_TRANSLATOR`                 | `false`. Can be `true` if needed.                         |
 
 7.  Configure permissions:
     1.  Click **Permissions**, then click the Execution role name. This opens a new IAM tab.
@@ -205,11 +205,11 @@ Now you need to secure the AWS API Gateway so that only your Snowflake account c
         }
         ```
 
-        | Placeholder            | Value                                                                                                                  |
-                | ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-        | `[ACCOUNT_ID]`         | The 12-digit AWS account ID associated with "snowflake_role".                                                          |
-        | `[ROLE_NAME]`          | "snowflake_role", or whatever value you entered for the name in [Create a Snowflake role](#create-the-snowflake-role). |
-        | `[METHOD_REQUEST_ARN]` | Your Method Request ARN.                                                                                               |
+| Placeholder            | Value                                                                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `[ACCOUNT_ID]`         | The 12-digit AWS account ID associated with "snowflake_role".                                                          |
+| `[ROLE_NAME]`          | "snowflake_role", or whatever value you entered for the name in [Create a Snowflake role](#create-the-snowflake-role). |
+| `[METHOD_REQUEST_ARN]` | Your Method Request ARN.                                                                                               |
 
     3.  Click **Save**.
 
@@ -269,11 +269,11 @@ Now you need to create an API integration in Snowflake that uses the API Gateway
     ;
     ```
 
-    | Placeholder        | Value                                 |
-        | ------------------ | ------------------------------------- |
-    | `[API_KEY]`        | The "snowflake_key" API key.          |
-    | `[ROLE_ARN]`       | The "snowflake_role" ARN.             |
-    | `[INVOCATION_URL]` | The invocation URL you noted earlier. |
+| Placeholder        | Value                                 |
+| ------------------ | ------------------------------------- |
+| `[API_KEY]`        | The "snowflake_key" API key.          |
+| `[ROLE_ARN]`       | The "snowflake_role" ARN.             |
+| `[INVOCATION_URL]` | The invocation URL you noted earlier. |
 
 1.  To verify the information was created properly and get additional information, run the following command:
 
@@ -309,10 +309,10 @@ Now you need to create an API integration in Snowflake that uses the API Gateway
     }
     ```
 
-    | Placeholder              | Value                                               |
-        | ------------------------ | --------------------------------------------------- |
-    | `[API_AWS_IAM_USER_ARN]` | The API_AWS_IAM_USER_ARN from your API integration. |
-    | `[API_AWS_EXTERNAL_ID]`  | The API_AWS_EXTERNAL_ID from your API integration.  |
+| Placeholder              | Value                                               |
+| ------------------------ | --------------------------------------------------- |
+| `[API_AWS_IAM_USER_ARN]` | The API_AWS_IAM_USER_ARN from your API integration. |
+| `[API_AWS_EXTERNAL_ID]`  | The API_AWS_EXTERNAL_ID from your API integration.  |
 
 5.  Click **Update policy**.
 
@@ -327,10 +327,10 @@ Now you can create your response translator in Snowflake.
     select count([COLUMN_NAME]) from [TABLE_NAME];
     ```
 
-    | Placeholder     | Value                                                                   |
-        | --------------- | ----------------------------------------------------------------------- |
-    | `[COLUMN_NAME]` | The name of the column you want to detokenize in your Skyflow vault.    |
-    | `[TABLE_NAME]`  | The name of the table that the column belongs to in your Skyflow vault. |
+| Placeholder     | Value                                                                   |
+| --------------- | ----------------------------------------------------------------------- |
+| `[COLUMN_NAME]` | The name of the column you want to detokenize in your Skyflow vault.    |
+ | `[TABLE_NAME]`  | The name of the table that the column belongs to in your Skyflow vault. |
 
 3.  Replacing [INPUT_COUNT_VALUE] with the result of the query, run the following command:
 
