@@ -392,3 +392,5 @@ SELECT detokenize('d2037178-646f-42c9-b73e-c3edf10d9805');
 
 SELECT detokenize(column_name), column_name from table_name;
 ```
+## Reporting a Vulnerability
+If you discover a potential security issue in this project, please reach out to us at <security@skyflow.com>. Please do not create public GitHub issues or Pull Requests, as malicious actors could potentially view them.
