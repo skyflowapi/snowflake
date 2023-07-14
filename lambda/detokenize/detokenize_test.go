@@ -1,3 +1,6 @@
+/*
+Copyright (c) 2023 Skyflow, Inc.
+*/
 package detokenize_test
 
 import (
