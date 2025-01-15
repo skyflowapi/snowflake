@@ -50,21 +50,10 @@ Next, you'll create and configure the Lambda function to detokenize values from 
 
           ```bash
           cd lambda/detokenize
-          GOOS=linux GOARCH=amd64 go build -o main cmd/main.go
+          GOOS=linux GOARCH=amd64 go build -o bootstrap cmd/main.go
           cd ..
-          zip -r detokenize.zip detokenize/
-          ```
-
-        - Windows:
-
-          ```cmd
-          cd lambda\detokenize
-          go.exe install github.com/aws/aws-lambda-go/cmd/build-lambda-zip@latest
-          set GOOS=linux
-          set GOARCH=amd64
-          set CGO_ENABLED=0
-          go build main.go
-          %USERPROFILE%\Go\bin\build-lambda-zip.exe -o detokenize.zip main
+          mv detokenize/bootstrap bootstrap
+          zip detokenize.zip bootstrap
           ```
 
         This creates a `detokenize.zip` file. You'll need this later.
@@ -72,7 +61,7 @@ Next, you'll create and configure the Lambda function to detokenize values from 
 2.  Create the Lambda:
     1.  In AWS Lambda, click **Create function**.
     2.  For **Function name**, enter "detokenize_in_snowflake".
-    3.  For **Runtime**, choose **Go 1.x**.
+    3.  For **Runtime**, choose **Amazon Linux 2023**.
     4.  For **Architecture**, choose **x86_64**.
     5.  Click **Create**.
 3.  Under **Code source**, click **Upload from**, choose **.zip file**, and upload the `detokenize.zip` file you created earlier.
@@ -154,8 +143,7 @@ Creating an API Gateway gives Snowflake a way to access the Lambda function.
 7.  Create the "detokenize" resource:
     1.  In the **Resources** section, click **Actions** > **Create Resource**.
     2.  For **Resource name**, enter "detokenize".
-    3.  For **Resource path**, enter "detokenize".
-    4.  Click **Create Resource**.
+    3.  Click **Create Resource**.
 8.  Create the "POST" method:
     1.  Click **Actions** > **Create Method**.
     2.  For the HTTP method, choose **POST**, then click the checkmark.
