@@ -1,6 +1,7 @@
 /*
 Copyright (c) 2023 Skyflow, Inc.
 */
+
 package detokenize
 
 import (
@@ -10,15 +11,15 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/golang/protobuf/jsonpb"
-	v1 "github.com/skyflowapi/common/api/v1"
 	saUtil "github.com/skyflowapi/skyflow-go/serviceaccount/util"
+	"google.golang.org/protobuf/encoding/protojson"
+
+	proto "github.com/skyflowapi/snowflake/lambda/detokenize/proto"
 )
 
 var bearerToken = ""
@@ -80,7 +81,7 @@ func GetTokenArray(tokenReq TokenRequest) ([]string, error) {
 }
 
 // detokenize takes in a Vault URL, Bearer Token, list of tokens and Enable Response Translator and issues a detokenize call to Skyflow's backend.
-func detokenize(vaultURL, bearerToken string, tokens []string, enableResponseTranslator string) (*v1.DetokenizeResponse, string, error) {
+func detokenize(vaultURL, bearerToken string, tokens []string, enableResponseTranslator string) (*proto.DetokenizeResponse, string, error) {
 	if vaultURL == "" {
 		err := errors.New("vaultURL must be non-empty string")
 		log.Println(err.Error())
@@ -99,9 +100,9 @@ func detokenize(vaultURL, bearerToken string, tokens []string, enableResponseTra
 		return nil, "", err
 	}
 
-	payload := v1.DetokenizePayload{DetokenizationParameters: []*v1.DetokenizeRecordRequest{}, DownloadURL: true}
+	payload := proto.DetokenizePayload{DetokenizationParameters: []*proto.DetokenizeRecordRequest{}, DownloadURL: true}
 	for _, token := range tokens {
-		payload.DetokenizationParameters = append(payload.DetokenizationParameters, &v1.DetokenizeRecordRequest{Token: token, Redaction: v1.RedactionEnum_PLAIN_TEXT})
+		payload.DetokenizationParameters = append(payload.DetokenizationParameters, &proto.DetokenizeRecordRequest{Token: token, Redaction: proto.RedactionEnum_PLAIN_TEXT})
 	}
 
 	var buf bytes.Buffer
@@ -140,21 +141,17 @@ func detokenize(vaultURL, bearerToken string, tokens []string, enableResponseTra
 		} `json:"error"`
 	}
 
-	resBodyBytes, _ := ioutil.ReadAll(res.Body)
-	resBodyString := string(resBodyBytes)
-	res.Body = ioutil.NopCloser(bytes.NewBuffer(resBodyBytes))
-
-	var detokenizeResponse v1.DetokenizeResponse
-	if err = jsonpb.Unmarshal(res.Body, &detokenizeResponse); err != nil {
+	resBodyBytes, _ := io.ReadAll(res.Body)
+	var detokenizeResponse proto.DetokenizeResponse
+	if err = protojson.Unmarshal(resBodyBytes, &detokenizeResponse); err != nil {
 		var response ErrorResponse
 		var message string
-		er := json.Unmarshal([]byte(resBodyString), &response)
-		if er != nil {
+		if err2 := json.Unmarshal(resBodyBytes, &response); err2 != nil {
 			message = "Error parsing missing token values"
-			log.Printf("Could not unmarshal detokenize response. Error: %v\n\n", er)
+			log.Printf("Could not unmarshal detokenize response. Error: %v\n\n", err2)
 		} else {
 			if enableResponseTranslator == "true" {
-				message = resBodyString
+				message = string(resBodyBytes)
 				log.Println(message)
 			} else {
 				message = response.Error.Message

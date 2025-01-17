@@ -1,0 +1,87 @@
+syntax = "proto3";
+package v1;
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = ".";
+
+message RedactionEnum {
+  // Redaction type. Subject to policies assigned to the API caller. When used for detokenization, only supported for vaults that support [column groups](/tokenization-column-groups/).
+	enum REDACTION {
+		DEFAULT = 0;
+		REDACTED=1;
+		MASKED=2;
+		PLAIN_TEXT=3;
+	}
+}
+
+message DetokenizeRequest {
+	string vaultID = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+		description: "ID of the vault."
+	}];
+	DetokenizePayload detokenizePayload = 2;
+}
+
+message DetokenizePayload {
+	option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+		example:"{\"detokenizationParameters\":[{\"redaction\":\"PLAIN_TEXT\",\"token\":\"afbd1074-51c1-4a16-9eee-e2c0ecb52125\"},{\"redaction\":\"DEFAULT\",\"token\":\"05383487-fcae-42e5-a48e-5bd62a51af12\"}],\"downloadURL\":false}"
+	};
+	repeated DetokenizeRecordRequest detokenizationParameters = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+		description: "Detokenization details."
+	}];
+	bool downloadURL = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+		description: "If `true`, returns download URLs for fields with a file data type. URLs are valid for 15 minutes. If virus scanning is enabled, only returns if the file is clean."
+	}];
+	bool continueOnError = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+		default: "false",
+		description: "If `true`, the detokenization request continues even if an error occurs."
+	}];
+}
+
+message DetokenizeRecordRequest {
+	string token = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+		description: "Token that identifies the record to detokenize."
+	}];
+	RedactionEnum.REDACTION redaction = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+		description: "Redaction level to enforce for the returned record. Subject to policies assigned to the API caller."
+	}];
+}
+
+message DetokenizeResponse {
+	option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+		example:"{\"records\":[{\"token\":\"afbd1074-51c1-4a16-9eee-e2c0ecb52125\",\"value\":\"Robin\",\"valueType\":\"STRING\"},{\"token\":\"05383487-fcae-42e5-a48e-5bd62a51af12\",\"value\":\"*REDACTED*\",\"valueType\":\"STRING\"}]}"
+	};
+	repeated DetokenizeRecordResponse records = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+		description: "Records corresponding to the specified tokens."
+	}];
+}
+
+message DetokenizeRecordResponse {
+	enum ValueType {
+		NONE = 0;
+		STRING = 1;
+		INTEGER = 2;
+		FLOAT = 3;
+		BOOL = 4;
+		DATETIME = 5;
+		JSON = 6;
+		ARRAY = 7;
+		DATE = 8;
+		TIME = 9;
+	}
+
+	string token = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+		description: "Token of the record."
+	}];
+	ValueType valueType = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+		description: "Data type of the `value`."
+	}];
+	string value = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+		description: "Data corresponding to the token."
+	}];
+	google.protobuf.StringValue error = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+		description: "Error if token isn't found."
+	}];
+}
+
