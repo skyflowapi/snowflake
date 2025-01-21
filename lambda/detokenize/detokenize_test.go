@@ -10,7 +10,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	"gotest.tools/assert"
 
-	SD "snowflake/lambda/detokenize"
+	SD "github.com/skyflowapi/snowflake/lambda/detokenize"
 )
 
 var _ = Describe("Testing Get Token Array", func() {

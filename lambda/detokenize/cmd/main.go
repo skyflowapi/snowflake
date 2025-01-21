@@ -6,9 +6,9 @@ package main
 import (
 	"github.com/aws/aws-lambda-go/lambda"
 
-	m "snowflake/lambda/detokenize"
+	"github.com/skyflowapi/snowflake/lambda/detokenize"
 )
 
 func main() {
-	lambda.Start(m.HandleDetokenizeRequest)
+	lambda.Start(detokenize.HandleDetokenizeRequest)
 }

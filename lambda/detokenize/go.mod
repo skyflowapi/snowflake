@@ -1,31 +1,29 @@
-module snowflake/lambda/detokenize
+module github.com/skyflowapi/snowflake/lambda/detokenize
 
-go 1.20
+go 1.22.0
 
 require (
 	github.com/aws/aws-lambda-go v1.41.0
-	github.com/golang/protobuf v1.5.3
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.25.1
 	github.com/onsi/ginkgo/v2 v2.6.1
 	github.com/onsi/gomega v1.24.2
-	github.com/skyflowapi/common/api v1.5.4250
 	github.com/skyflowapi/skyflow-go/serviceaccount v0.0.0-20230505092522-2ef725e84e21
+	google.golang.org/protobuf v1.36.0
 	gotest.tools v2.2.0+incompatible
 )
 
 require (
-	github.com/go-logr/logr v1.2.3 // indirect
-	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
-	github.com/google/go-cmp v0.5.9 // indirect
-	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
+	github.com/golang/protobuf v1.5.4 // indirect
+	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/rogpeppe/go-internal v1.13.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/skyflowapi/skyflow-go/commonutils v0.0.0-20221207083805-e502fc29f175 // indirect
-	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
-	google.golang.org/genproto v0.0.0-20230301171018-9ab4bdc49ad5 // indirect
-	google.golang.org/grpc v1.54.0 // indirect
-	google.golang.org/protobuf v1.28.1 // indirect
+	golang.org/x/net v0.33.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
