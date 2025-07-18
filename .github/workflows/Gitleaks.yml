@@ -1,4 +1,4 @@
-name: Gitleaks secrets scan
+name: Gitleaks secrets scan 
 
 on:
   pull_request:
